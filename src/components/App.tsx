@@ -1,91 +1,31 @@
 import axios from "axios";
-
-import { useState } from "react";
-
-// import OrderForm from "./OrderForm/OrderForm";
-
-import SearchForm from "./SearchForm/SearchForm";
-import ArticleList from "./ArticleList/ArticleList";
-
-import type { Article } from "../types/article";
+import {useState, useEffect} from "react";
 
 
-
-interface ArticlesResponse {
-  hitsPerPage: number;
-  nbHits: number;
-  nbPages: number;
-  page: number;
-  hits: Article[];
-
-}
-
-
-
+import type { Character } from "../types/character";
 
 function App() {
 
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-
-  //   const form = event.currentTarget;
-
-  //   const formData = new FormData(form);
-
-  //   const username = formData.get('username');
-  //   const password = formData.get('password');
-  //   console.log({ username, password });
-
-  //   form.reset();
-  // };
-
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [character, setCharacter] = useState<Character | null>(null);
 
 
-  const handleSearch = async (topic: string) => {
-    try {
-      setIsLoading(true);
-      setIsError(false);
-      setArticles([]);
-      const {data} = await axios.get<ArticlesResponse>(`${import.meta.env.VITE_HN_URL}/search?query=${topic}`);
-      
-      setArticles(data.hits);
-      
-    } catch {
-      setIsError(true);
-      
-    } finally {
-      setIsLoading(false);
-    }
-     
+  useEffect(() => {
+      axios.get<Character>("https://swapi.info/api/people/1")
+    .then(({ data }) => {
+      setCharacter(data);
+    });
 
-  }
+  }, [])
+
+ 
 
   return (
     <>
-      <h1>Form</h1>
-      {/* <OrderForm />
-      <OrderForm /> */}
+      <h1>Lesson 6</h1>
 
+
+      <pre>{JSON.stringify(character, null, 2)}</pre>
       
-      {/* <form onSubmit={handleSubmit}>
-        <div>
-          <input type="text" name="username" />
-        </div>
-        <div>
-          <input type="password" name="password" />
-        </div>
-
-        <button type="submit">Submit</button>
-      </form> */}
-
-
-        <SearchForm onSearch={handleSearch}/>
-        {isLoading && <strong>Loading...</strong>}
-        {isError && <p>Oopps, somthing went wrong. Please try again!</p>}
-        {articles.length > 0 && <ArticleList items={articles} />}
 
     </>
   );
