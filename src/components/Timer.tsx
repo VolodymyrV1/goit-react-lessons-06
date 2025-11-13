@@ -15,11 +15,19 @@ export default function Timer() {
     useEffect(() => {
         console.log("useEfect");
         
-        setInterval(() => {
-            console.log("interval");
+        const intervalId = setInterval(() => {
+            console.log({intervalId});
             
           setTime(new Date());
         }, 1000);
+      
+      
+      return () => {
+        clearInterval(intervalId)
+      }
+
+      
+      
 
     }, [])
 

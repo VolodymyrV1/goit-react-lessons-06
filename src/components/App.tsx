@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Timer from './Timer';
+import Sidebar from './SideBar';
 
 import type { Character } from '../types/character';
 
@@ -17,6 +18,10 @@ function App() {
     return 0;
   });
 
+  const [isTimerVisible, setIsTimerVisible] = useState<boolean>(false);
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false)
+
   // useEffect(() => {
   //   console.log('useEffect');
 
@@ -31,11 +36,16 @@ function App() {
   //   fetchCharacter();
   // }, []);
 
-  // useEffect(() => {
-  //   console.log("useEffect", { counter });
+  useEffect(() => {
+    console.log("useEffect", { counter });
     
-  //   localStorage.setItem("counter", JSON.stringify(counter));
-  // }, [counter]);
+    localStorage.setItem("counter", JSON.stringify(counter));
+
+    return () => {
+      console.log("After");
+      
+    }
+  }, [counter]);
 
   // useEffect(() => {
   //   console.log("useEffect", {character});
@@ -49,6 +59,18 @@ function App() {
     setCounter(prevCounter => prevCounter + 1);
   };
 
+  const toggleTimerVisible = () => {
+    setIsTimerVisible(prevIsTimerVisible => !prevIsTimerVisible)
+  }
+
+  const openSidebar = () => {
+    setIsSidebarOpen(true);
+  }
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false)
+  }
+
   return (
     <>
       <h1>Lesson 6</h1>
@@ -56,8 +78,12 @@ function App() {
       <pre>{JSON.stringify(character, null, 2)}</pre>
 
       <button onClick={handleClick}>Clicks: {counter}</button>
+      <button onClick={toggleTimerVisible}>Toggle timer</button>
+      <button onClick={openSidebar}>Open Sidebar</button>
 
-      <Timer />
+      {isTimerVisible && <Timer />}
+      {isSidebarOpen && <Sidebar onClose={closeSidebar}/>}
+
     </>
   );
 }
