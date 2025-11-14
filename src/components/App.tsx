@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 import Timer from './Timer';
-import Sidebar from './SideBar';
+import Sidebar from './Sidebar';
 
 import type { Character } from '../types/character';
 
